@@ -31,7 +31,7 @@ app.get('/games', async (request, response) => {
 })
 
 app.post('/games/:id/ads', async (request, response) => {
-    const gameId = request.params.id;
+    const gameId: any = request.params.id;
     const body: any = request.body;
 
     const ad = await prisma.ad.create({
@@ -71,7 +71,7 @@ app.get('/games/:id/ads', async (request, response) => {
         }
     })
 
-    return response.json(ads.map(ad => {
+    return response.json(ads.map((ad: any) => {
         return {
             ...ad,
             weekDays: ad.weekDays.split(','),
