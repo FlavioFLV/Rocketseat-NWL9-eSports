@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Image, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { Entypo } from '@expo/vector-icons'
@@ -12,12 +12,12 @@ import { THEME } from '../../theme';
 import { GameParams } from '../../@Types/@navigation';
 
 import { Background } from '../../components/Background';
+import { DuoCard, DuoCardProps } from '../../components/DuoCard';
 import { Heading } from '../../components/Heading';
-import { DuoCard } from '../../components/DuoCard';
 
 
 export function Game() {
-  const [duos, setDuos] = useState([])
+  const [duos, setDuos] = useState<DuoCardProps[]>([])
 
   const navigation = useNavigation();
   const route = useRoute();
@@ -28,9 +28,9 @@ export function Game() {
   }
 
   useEffect(() => {
-    fetch(`http://192.168.110.22:3333/games/${game.id}/ads`) // maquina da empresa
+    fetch(`http://192.168.18.70:3333/games/${game.id}/ads`) // maquina da empresa
     .then(response => response.json())
-    .then(data => console.log(data))
+    .then(data => setDuos(data))
   }, []);
 
   return (
@@ -64,8 +64,24 @@ export function Game() {
           subtitle='Conecte-se para começar a jogar!'
         />
 
-        <DuoCard 
-          
+        <FlatList
+          data={duos}
+          keyExtractor={item => item.id}
+          renderItem={({item}) => (
+            <DuoCard
+              data={item}
+              onConnect={() => { }}
+            />
+          )} 
+          horizontal
+          style={styles.containerList}
+          contentContainerStyle={[duos.length > 0 ? styles.contentList : styles.emptyListContent]}
+          showsHorizontalScrollIndicator={false}
+          ListEmptyComponent={() => (
+            <Text style={styles.emptyListText}>
+              Não há anúncios publicados ainda.
+            </Text>
+          )}
         />
 
       </SafeAreaView>
