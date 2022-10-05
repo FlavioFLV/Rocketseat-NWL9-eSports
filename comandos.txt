@@ -1,0 +1,15 @@
+:::: aula 04
+biblioteca - react navigation
+npm install @react-navigation/native
+
+useEffect - serve para não repetir a chamada 
+
+modal - radix-ui
+npm install @radix-ui/react-dialog
+
+npm i --save phosphor-react-native
+
+:::: aula 6
+00:07:00 - npm install @radix-ui/react-checkbox 
+00:16:00 - npm install @radix-ui/react-toggle-group
+00:36:00 - npm i axios
