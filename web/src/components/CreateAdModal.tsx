@@ -19,20 +19,37 @@ export function CreateAdModal() {
     const [weekDays, setWeekDays] = useState<string[]>([])
     const [useVoiceChannel, setUseVoiceChannel] = useState(false)
 
-
     useEffect(() => {
         axios('http://localhost:3333/games').then(response => {
           setGames(response.data)
         })
     }, [])
 
-    function handleCreateAd(event: FormEvent ) {
+    async function handleCreateAd(event: FormEvent ) {
         event.preventDefault();
 
         const formData = new FormData(event.target as HTMLFormElement)
         const data = Object.fromEntries(formData)
 
-        axios.post('http://localhost:3333/games/')
+        console.log(data)
+        console.log(weekDays)
+        console.log(useVoiceChannel)
+
+        try {
+            await axios.post(`http://localhost:3333/games/${data.game}/ads`, {
+                name: data.name,
+                yearsPlaying: Number(data.yearsPlaying),
+                discord: data.discord,
+                weekDays: weekDays.map(Number),
+                hourStart: data.hourStart,
+                hourEnd: data.hourEnd,
+                useVoiceChannel: useVoiceChannel
+            })            
+            alert('Anúncio criado com sucesso!')
+        } catch (error) {
+            console.log(error)
+            alert('Erro ao criar anúncio!')
+        }
     }
 
     return (
@@ -65,8 +82,8 @@ export function CreateAdModal() {
 
                     <div className='grid grid-cols-2 gap-6'>
                         <div className='flex flex-col gap-2'>
-                            <label htmlFor="yearPlaying">Joga há quantos anos?</label>
-                            <Input id="yearPlaying" name="yearPlaying" type="number" placeholder='Tudo bem ser ZERO' />
+                            <label htmlFor="yearsPlaying">Joga há quantos anos?</label>
+                            <Input id="yearsPlaying" name="yearsPlaying" type="number" placeholder='Tudo bem ser ZERO' />
                         </div>
                         <div className='flex flex-col gap-2'>
                             <label htmlFor="discord">Qual seu Discord?</label>
